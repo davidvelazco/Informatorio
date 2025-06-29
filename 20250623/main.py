@@ -1,0 +1,126 @@
+import sqlite3
+
+conn = sqlite3.connect('mi_base_de_datos.db')
+
+cursor = conn.cursor()
+
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS PERSONA (
+    CUIL INTEGER PRIMARY KEY,
+    NOMBRE TEXT NOT NULL,
+    CALLE TEXT,
+    NUMERO INTEGER,
+    COMUNA TEXT,
+    CIUDAD TEXT
+);
+''')
+
+# class Persona:
+#     def __init__(self, cuil, nombre, calle, numero, comuna, ciudad, pepito):
+#         self.cuil = cuil
+#         self.nombre = nombre
+#         self.calle = calle
+#         self.numero = numero
+#         self.comuna = comuna
+#         self.ciudad = ciudad
+#         self.pepito = pepito
+
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS CLIENTE (
+    CUIL INTEGER PRIMARY KEY,
+    FOREIGN KEY (CUIL) REFERENCES PERSONA(CUIL)
+);
+''')
+
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS PROVEEDOR (
+    CUIL INTEGER PRIMARY KEY,
+    PAGINA_WEB TEXT,
+    TELEFONO INTEGER,
+    FOREIGN KEY (CUIL) REFERENCES PERSONA(CUIL)
+);
+''')
+
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS CATEGORIA (
+    ID_CATEGORIA INTEGER PRIMARY KEY AUTOINCREMENT,
+    NOMBRE TEXT,
+    DESCRIPCION TEXT               
+);
+''')
+
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS PRODUCTO (
+    ID_PRODUCTO INTEGER PRIMARY KEY AUTOINCREMENT,
+    NOMBRE TEXT,
+    PRECIO REAL,
+    STOCK INTEGER,
+    CATEGORIA INTEGER,
+    FOREIGN KEY (CATEGORIA) REFERENCES CATEGORIA(ID_CATEGORIA)               
+);
+''')
+
+# tabla intermedia entre producto y proveedores
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS PROV_PROVEE_PROD (
+    PROD_ID_PRODUCTO INTEGER,
+    PROV_CUIL INTEGER,
+    PRIMARY KEY (PROD_ID_PRODUCTO, PROV_CUIL),
+    FOREIGN KEY (PROD_ID_PRODUCTO) REFERENCES PRODUCTO(ID_PRODUCTO),
+    FOREIGN KEY (PROV_CUIL) REFERENCES PROVEEDOR(CUIL)            
+);
+''')
+
+# TABLA INTERMEDIA VENTA_PROD_CLIENTE_COMPRA
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS VENTA (
+    ID_VENTA INTEGER PRIMARY KEY AUTOINCREMENT,
+    FECHA TEXT,
+    MONTO_TOTAL REAL        
+);
+''')
+
+# TABLA INTERMEDIA VENTA_PROD_CLIENTE_COMPRA
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS VENTA_PROD_CLIENTE_COMPRA (
+    PROD_ID_PRODUCTO INTEGER,
+    CLI_CUIL INTEGER,
+    ID_ID_VENTA INTEGER,
+               
+    CANTIDAD INTEGER,
+    SUB_TOTAL REAL,
+    DESCUENTO REAL,
+
+    PRIMARY KEY (PROD_ID_PRODUCTO, CLI_CUIL, ID_ID_VENTA),
+    FOREIGN KEY (PROD_ID_PRODUCTO) REFERENCES PRODUCTO(ID_PRODUCTO),
+    FOREIGN KEY (CLI_CUIL) REFERENCES CLIENTE(CUIL),          
+    FOREIGN KEY (ID_ID_VENTA) REFERENCES VENTA(ID_VENTA)         
+);
+''')
+
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS TELEFONO (
+    NUM INTEGER PRIMARY KEY,
+    CLI_CUIL INTEGER,
+    FOREIGN KEY(CLI_CUIL) REFERENCES CLIENTE(CUIL)     
+);
+''')
+
+# cursor.execute('''
+# ALTER TABLE PERSONA ADD COLUMN SUSCRIPTO INTEGER;
+# ''')
+
+# cursor.execute('''
+# ALTER TABLE PERSONA ADD COLUMN SUSCRIPTO_2 INTEGER CHECK (SUSCRIPTO_2 IN (0, 1));
+# ''')
+
+# cursor.execute('''
+# ALTER TABLE PERSONA DROP COLUMN SUSCRIPTO;
+# ''')
+
+# cursor.execute('''
+# ALTER TABLE PERSONA RENAME COLUMN SUSCRIPTO_2 TO SUSCRIPTO;
+# ''')
+
+conn.commit()
+conn.close()
