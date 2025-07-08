@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Preguntas{% endblock %}
+
+{% block content%}
+{% if list_preguntas %}
+<ul>
+    {% for pregunta in list_preguntas %}
+    <li>
+        <a href="/voto/{{ pregunta.id }}/">{{ pregunta.pregunta_texto }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+    <p>No existen preguntas...</p>
+{% endif %}
+{% endblock %}

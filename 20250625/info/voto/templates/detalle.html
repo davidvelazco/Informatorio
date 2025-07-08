@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Pregunta: {{ pregunta.id }}{% endblock %}
+
+{% block content %}
+<h1>Detalle de la pregunta {{ pregunta.id }}</h1>
+<p>Pregunta: {{ pregunta.pregunta_texto }}</p>
+<p>Fecha de creacion: {{ pregunta.publicado_en }}</p>
+{% endblock%}

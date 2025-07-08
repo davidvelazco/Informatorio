@@ -1,0 +1,18 @@
+.header {
+    background-color: cadetblue;
+    margin: -10px;
+}
+
+.main {
+    background-color: rgb(173, 113, 40);
+}
+
+.footer {
+    background-color: gray;
+    margin: -10px;
+}
+
+.nav-bar-logo {
+    max-width: 90px;
+    max-height: 90px;
+}

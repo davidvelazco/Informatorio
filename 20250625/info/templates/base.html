@@ -1,0 +1,30 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}Base{% endblock %}</title>
+    </head>
+
+    <link href="{% static 'css/global.css' %}" rel="stylesheet" />
+<body>
+    <header class="header">
+        <div>
+            <a href="{% url 'index' %}"><img class="nav-bar-logo" src="{% static 'img/logo.png' %}"/></a>
+        </div>
+        <div>
+            <a href="{% url 'preguntas' %}">Preguntas</a>
+        </div>
+    </header>
+    <main class="main">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="footer">
+        <div>
+            <p>Created by Informatorio</p>
+            <p>2024 Copyright - All rights reserved</p>
+        </div>
+    </footer>
+</body>
+
+</html>
